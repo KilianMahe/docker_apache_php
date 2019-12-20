@@ -25,7 +25,7 @@ RUN apt-get clean && apt-get update && apt-get install -y --fix-missing \
   libjpeg62-turbo-dev \
   libxml2-dev \
   libxslt1-dev \
-  mysql-client \
+  mariadb-client \
   zlib1g-dev \
   libzip-dev \
   zip \
