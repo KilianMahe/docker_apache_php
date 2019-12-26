@@ -125,7 +125,7 @@ RUN gem install compass
 
 # Installation node.js
 RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo bash -
-RUN DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install -y nodejs
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install -y nodejs npm
 
 # Installation of LESS
 RUN npm update -g npm@latest && \
@@ -169,9 +169,9 @@ RUN phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sni
 # RUN composer global require bamarni/symfony-console-autocomplete
 
 # installation of ssmtp
-RUN DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y ssmtp && rm -r /var/lib/apt/lists/*
-ADD core/ssmtp.conf /etc/ssmtp/ssmtp.conf
-ADD core/php-smtp.ini /usr/local/etc/php/conf.d/php-smtp.ini
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y msmtp && rm -r /var/lib/apt/lists/*
+ADD core/ssmtp.conf /etc/msmtp/msmtp.conf
+ADD core/php-smtp.ini /usr/local/etc/php/conf.d/php-msmtp.ini
 
 COPY config/apache2.conf /etc/apache2
 COPY core/envvars /etc/apache2
