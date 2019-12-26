@@ -20,7 +20,7 @@ The image basically contains:
     version: '2'
     services:
       web:
-        image: naroner/docker-apache-php:latest
+        image: naroner/docker_apache_php_drupal:latest
         ports:
           - "80:80"
           - "9000:9000"
