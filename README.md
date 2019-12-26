@@ -28,7 +28,7 @@ The image basically contains:
           - SERVERNAME=example.local
           - SERVERALIAS=example2.local *.example2.local
           - BLACKFIRE_CLIENT_ID=XXXX
-          - BLACKFIRE_SERVER_TOKEN=XXXX
+          - BLACKFIRE_CLIENT_TOKEN=XXXX
         volumes:
           - /home/docker/projets/example/:/var/www/html/
           - /home/docker/.ssh/:/var/www/.ssh/
@@ -85,7 +85,7 @@ The image basically contains:
       blackfire:
         image: blackfire/blackfire
         environment:
-          - BLACKFIRE_CLIENT_ID=XXXX
+          - BLACKFIRE_SERVER_ID=XXXX
           - BLACKFIRE_SERVER_TOKEN=XXXX
 
 [Docker Hub page](https://hub.docker.com/r/naroner/docker_apache_php_drupal)
