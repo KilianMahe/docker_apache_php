@@ -149,7 +149,7 @@ RUN cd /usr/src && mv composer.phar /usr/bin/composer
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
 RUN cd /usr/local/src/drush && git checkout 10.1.1
 RUN ln -s /usr/local/src/drush/drush /usr/bin/drush
-RUN cd /usr/local/src/drush && composer update && composer install
+RUN cd /usr/local/src/drush && composer install
 
 # Installation of WP-CLI
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/local/bin/wp
@@ -203,6 +203,7 @@ RUN apt-get update && apt-get install -y blackfire-agent blackfire-php
 # Our apache volume
 VOLUME /var/www/html
 
+# create directory for ssh keys
 # create directory for ssh keys
 RUN mkdir /var/www/.ssh/
 RUN chown -R www-data:www-data /var/www/
