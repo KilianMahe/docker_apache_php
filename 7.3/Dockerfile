@@ -195,13 +195,9 @@ RUN \curl -L https://get.rvm.io | rvm_path=/opt/rvm bash -s stable
 RUN /bin/bash -l -c "/opt/rvm/bin/rvm requirements"
 
 # Add blackFire.io
-RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
-    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
-    && mkdir -p /tmp/blackfire \
-    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
-    && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get ('extension_dir');")/blackfire.so \
-    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
-    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
+RUN wget -q -O - https://packages.blackfire.io/gpg.key | apt-key add -
+RUN echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
+RUN apt-get update && apt-get install -y blackfire-agent blackfire-php
 
 # Our apache volume
 VOLUME /var/www/html
