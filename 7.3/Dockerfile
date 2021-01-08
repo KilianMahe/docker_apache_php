@@ -63,7 +63,7 @@ RUN pecl install imagick-3.4.3
 # Install xdebug. We need at least 2.4 version to have PHP 7 support.
 RUN cd /tmp/ && wget https://xdebug.org/files/xdebug-2.7.0RC2.tgz && tar -xvzf xdebug-2.7.0RC2.tgz && cd xdebug-2.7.0RC2/ && phpize && ./configure --enable-xdebug --with-php-config=/usr/local/bin/php-config && make && make install
 RUN cd /tmp/xdebug-2.7.0RC2 && cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20180731/
-RUN echo 'zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so' >> /usr/local/etc/php/php.ini
+RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so' >> /usr/local/etc/php/php.ini
 RUN touch /usr/local/etc/php/conf.d/xdebug.ini &&\
   echo xdebug.remote_enable=1 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
   echo xdebug.remote_autostart=0 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
