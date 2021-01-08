@@ -134,14 +134,14 @@ RUN npm install -g gulp
 RUN npm install -g bower
 
 # Installation of Composer
-RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php;
+RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php -- --1;
 RUN cd /usr/src && mv composer.phar /usr/bin/composer
 
 # Installation of drush
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-RUN cd /usr/local/src/drush && git checkout 10.3.4
+RUN cd /usr/local/src/drush && git checkout 9.7.2
 RUN ln -s /usr/local/src/drush/drush /usr/bin/drush
-RUN cd /usr/local/src/drush && composer update && composer install
+RUN cd /usr/local/src/drush && composer install
 
 # Installation of WP-CLI
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/local/bin/wp
