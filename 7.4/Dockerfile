@@ -52,10 +52,6 @@ RUN cd /tmp/php-memcached && phpize && ./configure --disable-memcached-sasl && m
 
 RUN apt-get install pkg-config libmagickwand-dev -y
 
-COPY docker-php-ext-install /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-php-ext-install
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
-
 RUN docker-php-source extract
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-xpm=/usr/include/ --enable-gd-jis-conv
 
@@ -64,7 +60,6 @@ RUN pecl install imagick-3.4.3
 RUN cd /tmp/ && wget https://xdebug.org/files/xdebug-2.9.0.tgz && tar -xvzf xdebug-2.9.0.tgz && cd xdebug-2.9.0/ && phpize && ./configure --enable-xdebug --with-php-config=/usr/local/bin/php-config && make && make install
 RUN ls -l /usr/local/lib/php/extensions/
 RUN cd /tmp/xdebug-2.9.0 && cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/
-RUN echo 'zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so' >> /usr/local/etc/php/php.ini
 RUN touch /usr/local/etc/php/conf.d/xdebug.ini &&\
   echo xdebug.remote_enable=1 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
   echo xdebug.remote_autostart=0 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
@@ -142,12 +137,12 @@ RUN npm install -g gulp
 RUN npm install -g bower
 
 # Installation of Composer
-RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php;
+RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php -- --1;
 RUN cd /usr/src && mv composer.phar /usr/bin/composer
 
 # Installation of drush
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-RUN cd /usr/local/src/drush && git checkout 9.7.1
+RUN cd /usr/local/src/drush && git checkout 9.7.2
 RUN ln -s /usr/local/src/drush/drush /usr/bin/drush
 RUN cd /usr/local/src/drush && composer install
 
