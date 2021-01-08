@@ -51,25 +51,10 @@ RUN cd /tmp/php-memcached && phpize && ./configure --disable-memcached-sasl && m
 
 RUN apt-get install pkg-config libmagickwand-dev -y
 
-COPY docker-php-ext-install /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-php-ext-install
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
 
 RUN docker-php-source extract
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-xpm-dir=/usr/include/ --enable-gd-jis-conv
-
-RUN pecl install imagick-3.4.3
-
-# Install xdebug. We need at least 2.4 version to have PHP 7 support.
-RUN cd /tmp/ && wget https://xdebug.org/files/xdebug-2.7.0RC2.tgz && tar -xvzf xdebug-2.7.0RC2.tgz && cd xdebug-2.7.0RC2/ && phpize && ./configure --enable-xdebug --with-php-config=/usr/local/bin/php-config && make && make install
-RUN cd /tmp/xdebug-2.7.0RC2 && cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20180731/
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so' >> /usr/local/etc/php/php.ini
-RUN touch /usr/local/etc/php/conf.d/xdebug.ini &&\
-  echo xdebug.remote_enable=1 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
-  echo xdebug.remote_autostart=0 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
-  echo xdebug.remote_connect_back=1 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
-  echo xdebug.remote_port=9000 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
-  echo xdebug.remote_log=/tmp/php5-xdebug.log >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN docker-php-ext-install \
   opcache \
@@ -91,7 +76,6 @@ RUN docker-php-ext-install \
 
 RUN docker-php-ext-enable \
   opcache \
-  imagick \
   gd \
   mbstring \
   zip \
@@ -107,6 +91,19 @@ RUN docker-php-ext-enable \
   ftp \
   bcmath \
   ldap
+  
+RUN pecl install imagick-3.4.3
+
+# Install xdebug. We need at least 2.4 version to have PHP 7 support.
+RUN cd /tmp/ && wget https://xdebug.org/files/xdebug-2.7.0RC2.tgz && tar -xvzf xdebug-2.7.0RC2.tgz && cd xdebug-2.7.0RC2/ && phpize && ./configure --enable-xdebug --with-php-config=/usr/local/bin/php-config && make && make install
+RUN cd /tmp/xdebug-2.7.0RC2 && cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20180731/
+RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so' >> /usr/local/etc/php/php.ini
+RUN touch /usr/local/etc/php/conf.d/xdebug.ini &&\
+  echo xdebug.remote_enable=1 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
+  echo xdebug.remote_autostart=0 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
+  echo xdebug.remote_connect_back=1 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
+  echo xdebug.remote_port=9000 >> /usr/local/etc/php/conf.d/xdebug.ini &&\
+  echo xdebug.remote_log=/tmp/php5-xdebug.log >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN pecl install yaml-2.0.4 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
 
@@ -146,9 +143,9 @@ RUN cd /usr/src && mv composer.phar /usr/bin/composer
 
 # Installation of drush
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-RUN cd /usr/local/src/drush && git checkout 9.7.1
+RUN cd /usr/local/src/drush && git checkout 10.3.4
 RUN ln -s /usr/local/src/drush/drush /usr/bin/drush
-RUN cd /usr/local/src/drush && composer install
+RUN cd /usr/local/src/drush && composer update && composer install
 
 # Installation of WP-CLI
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/local/bin/wp
